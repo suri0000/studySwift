@@ -11,8 +11,7 @@ class BaseballGame {
   func start() {
     let answer = makeAnswer()
     print("⚾️ 안녕하세요! 야구 게임을 시작합니다 ⚾️")
-    print("1에서 9까지의 서로 다른 임의의 수 3개를 정하고 맞추는 게임입니다")
-    print("0도 포함되면 안 됩니다!")
+    print("0에서 9까지의 서로 다른 임의의 수 3개를 정하고 맞추는 게임입니다")
     print("숫자를 입력해주세요!")
 
     var correctNumber: Bool = true
@@ -33,9 +32,8 @@ class BaseballGame {
         print("세 자리 숫자를 입력해주세요.")
       } else if input[input.startIndex] == input[input.index(after: input.startIndex)] ||
                   input[input.index(after: input.startIndex)] == input[input.index(before: input.endIndex)] ||
-                  input[input.startIndex] == input[input.index(before: input.endIndex)] ||
-                  input.contains("0") {
-        print("1-9까지의 서로 다른 임의의 수 3개를 입력해주세요. 0이 들어가도 안 됩니다.")
+                  input[input.startIndex] == input[input.index(before: input.endIndex)] {
+        print("0-9까지의 서로 다른 임의의 수 3개를 입력해주세요.")
       } else if input.count == 3 {
         for index in 0...2 {
           if inputNumbers[index] == answerNumbers[index] {
@@ -75,8 +73,7 @@ class BaseballGame {
     for str in stringNumbers {
       if str[str.startIndex] != str[str.index(after: str.startIndex)] &&
           str[str.index(after: str.startIndex)] != str[str.index(before: str.endIndex)] &&
-          str[str.startIndex] != str[str.index(before: str.endIndex)] &&
-          !str.contains("0") {
+          str[str.startIndex] != str[str.index(before: str.endIndex)] {
         answers.append(str)
       }
     }
