@@ -8,37 +8,38 @@
 import Foundation
 
 class BaseballGame {
+  
   func start() {
-    let answer = makeAnswer()
-    print("⚾️ 안녕하세요! 야구 게임을 시작합니다 ⚾️")
+    print("\n게임을 시작합니다.")
     print("0에서 9까지의 서로 다른 임의의 수 3개를 정하고 맞추는 게임입니다")
-    print("숫자를 입력해주세요!")
+    print("숫자를 입력해주세요.")
 
+    let answer = makeAnswer()
+    
+    print(answer)
+    
     var correctNumber: Bool = true
-    var answerNumbers = Array(answer)
     
     while correctNumber {
       
-      var input = readLine()!
-      var inputNumbers = Array(input)
+      let input = readLine()!
+      let inputNumbers = input.map { Int(String($0)) ?? 0 }
       var strike = 0
       var ball = 0
       
-      if (Int(input) == nil) {
+      if ((Int(input)) == nil) {
         print("문자열 말고, 숫자를 입력해주세요.")
       } else if Int(input) ?? -1 < 0 {
         print("음수입니다. 양수를 입력해주세요.")
       } else if input.count != 3 {
         print("세 자리 숫자를 입력해주세요.")
-      } else if input[input.startIndex] == input[input.index(after: input.startIndex)] ||
-                  input[input.index(after: input.startIndex)] == input[input.index(before: input.endIndex)] ||
-                  input[input.startIndex] == input[input.index(before: input.endIndex)] {
+      } else if Array(input).count != Set(input).count {
         print("0-9까지의 서로 다른 임의의 수 3개를 입력해주세요.")
       } else if input.count == 3 {
         for index in 0...2 {
-          if inputNumbers[index] == answerNumbers[index] {
+          if inputNumbers[index] == answer[index] {
             strike += 1
-          } else if answerNumbers.contains(inputNumbers[index]) {
+          } else if answer.contains(inputNumbers[index]) {
             ball += 1
           }
         }
@@ -56,30 +57,18 @@ class BaseballGame {
     }
   }
   
-  func makeAnswer() -> String {
+  func makeAnswer() -> [Int] {
+    var answer: [Int] = []
     
-    var numbers: [Int] = []
-    var stringNumbers: [String] = []
-    var answers: [String] = []
-    
-    for number in 102...987 {
-      numbers.append(number)
-    }
-    
-    stringNumbers = numbers.map({ number in
-      String(number)
-    })
-    
-    for str in stringNumbers {
-      if str[str.startIndex] != str[str.index(after: str.startIndex)] &&
-          str[str.index(after: str.startIndex)] != str[str.index(before: str.endIndex)] &&
-          str[str.startIndex] != str[str.index(before: str.endIndex)] {
-        answers.append(str)
+    while answer.count < 3 {
+      answer.append(Int.random(in: 0...9))
+      
+      if answer.first == 0 {
+        answer.remove(at: 0)
+      } else if answer.count != Set(answer).count {
+        answer.removeAll()
       }
     }
-    
-    return answers.randomElement() ?? "잘못된 숫자입니다."
+    return answer
   }
 }
-
-

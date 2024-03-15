@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "59FD6F45-C7FC-4A06-B6EF-2D1E8A81AFCA"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "885D2F35-EA30-40DB-B861-F9A89AFEDAEB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BaseballGame/BaseballGame.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "start()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "885D2F35-EA30-40DB-B861-F9A89AFEDAEB - 53960c0625739fe4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BaseballGame.BaseballGame.start() -&gt; ()"
+                  moduleName = "BaseballGame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yeseul/SpartaTeamProjects/BaseballGame/BaseballGame/BaseballGame.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "80"
+                  endingLineNumber = "80"
+                  offsetFromSymbolStart = "3144">
+               </Location>
+               <Location
+                  uuid = "885D2F35-EA30-40DB-B861-F9A89AFEDAEB - 53960c0625739fa6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BaseballGame.BaseballGame.start() -&gt; ()"
+                  moduleName = "BaseballGame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yeseul/SpartaTeamProjects/BaseballGame/BaseballGame/BaseballGame.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78"
+                  offsetFromSymbolStart = "3140">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
