@@ -10,21 +10,23 @@ import UIKit
 class ViewController: UIViewController {
   
   let addButton = UIButton()
-  let toDo: [ToDo] = [ToDo(id: 0, title: "알고리즘 풀기", complete: true),
-                      ToDo(id: 1, title: "강의 듣기", complete: true)]
+  let tableView = UITableView()
+  
+  var toDo: [ToDo] = [ToDo(id: 0, title: "알고리즘 풀기", isComplete: true),
+                      ToDo(id: 1, title: "강의 듣기", isComplete: false)]
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
+    
     setAddButton()
     setTableView()
     
   }
   
   func setAddButton() {
-    
     addButton.setTitle("추가하기", for: .normal)
     addButton.setTitleColor(.systemBlue, for: .normal)
+    addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
     
     view.addSubview(addButton)
     addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -34,10 +36,27 @@ class ViewController: UIViewController {
       addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
     ])
   }
-  
+  @objc func addButtonTapped() {
+    let alertController = UIAlertController(title: "할 일 추가", message: nil, preferredStyle: .alert)
+    
+    alertController.addTextField { textField in
+      textField.placeholder = "할 일을 입력해주세요."
+    }
+    
+    let addAction = UIAlertAction(title: "추가", style: .default) { alertAction in
+      let newItem = alertController.textFields?.first?.text
+      self.toDo.append(ToDo(id: self.toDo.endIndex, title: newItem ?? "다시 입력해주세요", isComplete: false))
+      self.tableView.reloadData()
+    }
+    
+    let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+    
+    alertController.addAction(addAction)
+    alertController.addAction(cancelAction)
+    present(alertController, animated: true)
+  }
   
   func setTableView() {
-    let tableView = UITableView()
     tableView.dataSource = self
     tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     
@@ -58,11 +77,31 @@ extension ViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
     cell.textLabel?.text = toDo[indexPath.row].title
-    cell.accessoryView = UISwitch()
+    
+    let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: toDo[indexPath.row].title)
+    if toDo[indexPath.row].isComplete {
+      attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSMakeRange(0, attributeString.length))
+    }
+    cell.textLabel?.attributedText = attributeString
+    
+    let completeSwitch = UISwitch()
+    completeSwitch.isOn = toDo[indexPath.row].isComplete
+    completeSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+    
+    cell.accessoryView = completeSwitch
     
     return cell
+  }
+  
+  @objc func switchValueChanged(_ sender: UISwitch) {
+    guard let cell = sender.superview as? UITableViewCell, let indexPath = tableView.indexPath(for: cell) else {
+      return
+    }
+    toDo[indexPath.row].isComplete = sender.isOn
+    self.tableView.reloadData()
   }
   
 }
@@ -70,7 +109,7 @@ extension ViewController: UITableViewDataSource {
 struct ToDo {
   let id: Int
   let title: String
-  var complete: Bool = false
+  var isComplete: Bool = false
 }
 
 #Preview {
