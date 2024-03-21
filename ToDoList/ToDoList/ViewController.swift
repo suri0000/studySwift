@@ -58,6 +58,7 @@ class ViewController: UIViewController {
   
   func setTableView() {
     tableView.dataSource = self
+    tableView.delegate = self
     tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     
     self.view.addSubview(tableView)
@@ -104,6 +105,17 @@ extension ViewController: UITableViewDataSource {
     self.tableView.reloadData()
   }
   
+}
+
+extension ViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    toDo.remove(at: indexPath.row)
+    tableView.deleteRows(at: [indexPath], with: .fade)
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+  }
 }
 
 struct ToDo {
