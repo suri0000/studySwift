@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     
     let addAction = UIAlertAction(title: "추가", style: .default) { alertAction in
       let newItem = alertController.textFields?.first?.text
-      self.toDo.append(ToDo(id: self.toDo.endIndex, title: newItem ?? "다시 입력해주세요", isComplete: false))
+      self.toDo.append(ToDo(id: (self.toDo.last?.id ?? -1) + 1, title: newItem ?? "다시 입력해주세요", isComplete: false))
       self.tableView.reloadData()
     }
     
@@ -80,13 +80,15 @@ extension ViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-    cell.textLabel?.text = toDo[indexPath.row].title
+    let attributeString = NSMutableAttributedString(string: toDo[indexPath.row].title)
     
-    let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: toDo[indexPath.row].title)
     if toDo[indexPath.row].isComplete {
-      attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSMakeRange(0, attributeString.length))
+      attributeString.addAttribute(.strikethroughStyle, value: 1, range: NSMakeRange(0, attributeString.length))
+      cell.textLabel?.attributedText = attributeString
+    } else {
+      attributeString.removeAttribute(.strikethroughStyle, range: NSMakeRange(0, attributeString.length))
+      cell.textLabel?.attributedText = attributeString
     }
-    cell.textLabel?.attributedText = attributeString
     
     let completeSwitch = UISwitch()
     completeSwitch.isOn = toDo[indexPath.row].isComplete
