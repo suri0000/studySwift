@@ -155,7 +155,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     let sectionDate = dueDates[indexPath.section]
     let toDoByDate = toDo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
     
-    print(toDoByDate)
+    cell.imageView?.image = UIImage(named: "choonsik")
+    
     // Switch
     let attributeString = NSMutableAttributedString(string: toDoByDate[indexPath.row].title)
     
