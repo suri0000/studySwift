@@ -14,10 +14,7 @@ class ViewController: UIViewController {
   var dateTextField = UITextField()
   
   // To-Do 데이터
-  var toDo: [ToDo] = [ToDo(id: 0, title: "알고리즘 풀기", isComplete: true, dueDate: Date()),
-                      ToDo(id: 1, title: "강의 듣기", isComplete: false, dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()),
-                      ToDo(id: 2, title: "과제", isComplete: true, dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()),
-                      ToDo(id: 3, title: "운동", isComplete: false, dueDate: Calendar.current.date(byAdding: .day, value: 2, to: Date()) ?? Date())]
+  var todo = ToDo.toDo
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -43,7 +40,6 @@ class ViewController: UIViewController {
   
   @objc func addButtonTapped() {
     let alertController = UIAlertController(title: "할 일 추가", message: "날짜도 설정해주세요", preferredStyle: .alert)
-    alertController.view.frame = CGRect(x: 0, y: 0, width: 300, height: 500)
     
     // DatePicker
     let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: 100, height: 300))
@@ -51,7 +47,7 @@ class ViewController: UIViewController {
     datePicker.preferredDatePickerStyle = .wheels
     datePicker.locale = NSLocale(localeIdentifier: "ko_KO") as Locale
     datePicker.addTarget(self, action: #selector(dateChange), for: .valueChanged)
-   
+    
     // To-do
     alertController.addTextField { textField in
       textField.placeholder = "할 일을 입력해주세요"
@@ -64,10 +60,11 @@ class ViewController: UIViewController {
       self.dateTextField = textField
     }
     
+    // 추가, 취소
     let addAction = UIAlertAction(title: "추가", style: .default) { alertAction in
       let newItem = alertController.textFields?.first?.text
       let selectedDate = datePicker.date
-      self.toDo.append(ToDo(id: (self.toDo.last?.id ?? -1) + 1, title: newItem ?? "다시 입력해주세요", isComplete: false, dueDate: selectedDate))
+      self.todo.append(ToDo(id: (self.todo.last?.id ?? -1) + 1, title: newItem ?? "다시 입력해주세요", isComplete: false, dueDate: selectedDate))
       self.tableView.reloadData()
     }
     
@@ -79,22 +76,22 @@ class ViewController: UIViewController {
   }
   
   func dateFormat(date: Date) -> String {
-      let formatter = DateFormatter()
-      formatter.dateFormat = "yyyy년 MM월 dd일"
-      
-      return formatter.string(from: date)
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+    
+    return dateFormatter.string(from: date)
   }
   
   @objc func dateChange(_ sender: UIDatePicker) {
-      // 값이 변하면 UIDatePicker에서 날자를 받아와 형식을 변형해서 textField에 넣어줍니다.
+    // 값이 변하면 UIDatePicker에서 날자를 받아와 형식을 변형해서 textField에 넣어줍니다.
     self.dateTextField.text = dateFormat(date: sender.date)
   }
-
+  
   // MARK: - TableView
   func setTableView() {
     tableView.dataSource = self
     tableView.delegate = self
-    tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+    tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: ToDoTableViewCell.cellId)
     
     self.view.addSubview(tableView)
     tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -107,16 +104,15 @@ class ViewController: UIViewController {
   }
 }
 
-// MARK: - Datasource, Delegate
-extension ViewController: UITableViewDataSource, UITableViewDelegate {
-  
+// MARK: - DataSource, Delegate
+extension ViewController: UITableViewDataSource, UITableViewDelegate, ToDoTableViewCellDelegate {
   // Section
   func numberOfSections(in tableView: UITableView) -> Int {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MM월 dd일"
     
     // dueDate를 날짜 형식에 맞게 바꿈. 그리고 중복 없애서 배열에 넣기
-    let dueDates = Array(Set(toDo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
+    let dueDates = Array(Set(todo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
     
     return dueDates.count
   }
@@ -126,7 +122,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MM월 dd일"
     
-    let dueDates = Array(Set(toDo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
+    let dueDates = Array(Set(todo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
     
     return dueDates[section]
   }
@@ -136,65 +132,46 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MM월 dd일"
     
-    let dueDates = Array(Set(toDo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
+    let dueDates = Array(Set(todo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
     
     // titleForHeaderInSection
     let sectionDate = dueDates[section]
-
-    return toDo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }.count
+    
+    return todo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }.count
   }
   
   // MARK: - Cell
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "MM월 dd일"
     
-    let dueDates = Array(Set(toDo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
-    let sectionDate = dueDates[indexPath.section]
-    let toDoByDate = toDo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
-    
-    cell.imageView?.image = UIImage(named: "choonsik")
-    
-    // Switch
-    let attributeString = NSMutableAttributedString(string: toDoByDate[indexPath.row].title)
-    
-    if toDoByDate[indexPath.row].isComplete {
-      attributeString.addAttribute(.strikethroughStyle, value: 1, range: NSMakeRange(0, attributeString.length))
-      cell.textLabel?.attributedText = attributeString
-    } else {
-      attributeString.removeAttribute(.strikethroughStyle, range: NSMakeRange(0, attributeString.length))
-      cell.textLabel?.attributedText = attributeString
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.cellId, for: indexPath) as? ToDoTableViewCell else {
+      fatalError("Failed to dequeue ToDoTableViewCell")
     }
     
-    let completeSwitch = UISwitch()
-    completeSwitch.isOn = toDoByDate[indexPath.row].isComplete
-    completeSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-    
-    cell.accessoryView = completeSwitch
+    cell.delegate = self
+    cell.setToDoCell(indexPath: indexPath, with: todo)
     
     return cell
   }
   
-  @objc func switchValueChanged(_ sender: UISwitch) {
-    guard let cell = sender.superview as? UITableViewCell, let indexPath = tableView.indexPath(for: cell) else {
+  // Switch 값 변경
+  func switchValueChanged(for cell: ToDoTableViewCell, isOn: Bool) {
+    guard let indexPath = tableView.indexPath(for: cell) else {
       return
     }
     
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MM월 dd일"
     
-    let dueDates = Array(Set(toDo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
+    let dueDates = Array(Set(todo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
     let sectionDate = dueDates[indexPath.section]
-    let toDoByDate = toDo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
+    let toDoByDate = todo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
     
     // 섹션의 날짜와 같고, 선택된 행에 해당하는 할 일의 타이틀이 같은 경우
-    if let index = toDo.firstIndex(where: { dateFormatter.string(from: $0.dueDate) == sectionDate && $0.title == toDoByDate[indexPath.row].title }) {
-      toDo[index].isComplete = sender.isOn
+    if let index = todo.firstIndex(where: { dateFormatter.string(from: $0.dueDate) == sectionDate && $0.title == toDoByDate[indexPath.row].title }) {
+      todo[index].isComplete = isOn
     }
     
-    self.tableView.reloadData()
+    tableView.reloadData()
   }
   
   // Delete
@@ -203,14 +180,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MM월 dd일"
     
-    var dueDates = Array(Set(toDo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
+    var dueDates = Array(Set(todo.map { dateFormatter.string(from: $0.dueDate) })).sorted()
     let sectionDate = dueDates[indexPath.section]
-    let toDoByDate = toDo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
+    let toDoByDate = todo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
     let todoToDelete = toDoByDate[indexPath.row]
     
-    toDo.removeAll { $0.id == todoToDelete.id }
+    todo.removeAll { $0.id == todoToDelete.id }
     
-    let remainingToDoInSection = toDo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
+    let remainingToDoInSection = todo.filter { dateFormatter.string(from: $0.dueDate) == sectionDate }
     
     if remainingToDoInSection.isEmpty {
       if let sectionIndex = dueDates.firstIndex(of: sectionDate) {
@@ -225,13 +202,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
   }
-}
-
-struct ToDo {
-  let id: Int
-  let title: String
-  var isComplete: Bool = false
-  let dueDate: Date
 }
 
 #Preview {
