@@ -23,11 +23,10 @@ class ViewController: UIViewController {
     productManager.getProduct()
   }
   
-  func setProduct() {
-
+  @IBAction func updateProduct(_ sender: Any) {
+    productManager.getProduct()
   }
-
-
+  
 }
 
 extension ViewController: ProductManagerDelegate {
@@ -44,7 +43,5 @@ extension ViewController: ProductManagerDelegate {
       }
     }
   }
-  
-  
 }
 
