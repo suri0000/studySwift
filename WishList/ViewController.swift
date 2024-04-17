@@ -6,14 +6,45 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
 
+  @IBOutlet weak var productImage: UIImageView!
+  @IBOutlet weak var productPrice: UILabel!
+  @IBOutlet weak var productDescription: UILabel!
+  @IBOutlet weak var productName: UILabel!
+  
+  let productManager = ProductManager()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
+    productManager.delegate = self
+    productManager.getProduct()
+  }
+  
+  func setProduct() {
+
   }
 
 
+}
+
+extension ViewController: ProductManagerDelegate {
+  func retrieveProductData(product: Product) {
+    productName.text = product.title
+    productDescription.text = product.description
+    productPrice.text = String(product.price) + "$"
+    
+    DispatchQueue.global().async { [weak self] in
+      if let data = try? Data(contentsOf: product.thumbnail), let image = UIImage(data: data) {
+        DispatchQueue.main.async {
+          self?.productImage.image = image
+        }
+      }
+    }
+  }
+  
+  
 }
 
