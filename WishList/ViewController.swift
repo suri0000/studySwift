@@ -33,7 +33,12 @@ extension ViewController: ProductManagerDelegate {
   func retrieveProductData(product: Product) {
     productName.text = product.title
     productDescription.text = product.description
-    productPrice.text = String(product.price) + "$"
+    
+    let numberFommatter = NumberFormatter()
+    numberFommatter.numberStyle = .decimal
+    
+    guard let price = numberFommatter.string(from: product.price as NSNumber) else { return }
+    productPrice.text = price + "$"
     
     DispatchQueue.global().async { [weak self] in
       if let data = try? Data(contentsOf: product.thumbnail), let image = UIImage(data: data) {
