@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import CoreData
+//import CoreData
 
 class WishListTableViewController: UITableViewController {
   
-  let wishList = ["asd","adf"]
+  let coreDataManager = CoreDataManager.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +31,33 @@ class WishListTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 2
+      return coreDataManager.fetchWishProduct().count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WishListTableViewCell", for: indexPath)
+      let cell = tableView.dequeueReusableCell(withIdentifier: "WishListTableViewCell", for: indexPath) as! WishListTableViewCell
+      
+      let wishProductList = coreDataManager.fetchWishProduct()
+      let wishProduct = wishProductList[indexPath.row]
+      
+      cell.wishProductNumber.text = String(wishProduct.id) + "."
+      cell.wishProductTitle.text = wishProduct.title
+      cell.wishProductPrice.text = Int(wishProduct.price).numberFormmat(Int(wishProduct.price)) + "$"
+      
+      if let thumbnailURL = wishProduct.thumbnail {
+          URLSession.shared.dataTask(with: thumbnailURL) { (data, response, error) in
+              guard let data = data, error == nil else { return }
+              
+              // 썸네일 이미지 데이터를 UIImage로 변환
+              if let thumbnailImage = UIImage(data: data) {
+                  // UITableViewCell의 이미지뷰에 이미지 설정 (UI 업데이트는 메인 스레드에서 수행되어야 함)
+                  DispatchQueue.main.async {
+                      cell.wishProductImage.image = thumbnailImage
+                  }
+              }
+          }.resume()
+      }
+
 
         return cell
     }

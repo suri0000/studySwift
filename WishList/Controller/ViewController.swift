@@ -16,6 +16,8 @@ class ViewController: UIViewController {
   @IBOutlet weak var productName: UILabel!
   
   let productManager = ProductManager()
+  let coreDataManager = CoreDataManager.shared
+  var currentProduct: Product?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -27,18 +29,19 @@ class ViewController: UIViewController {
     productManager.getProduct()
   }
   
+  @IBAction func addWishList(_ sender: Any) {
+    guard let product = currentProduct else { return }
+      coreDataManager.saveWishProduct(product: product)
+  }
+  
 }
 
 extension ViewController: ProductManagerDelegate {
   func retrieveProductData(product: Product) {
+    currentProduct = product
     productName.text = product.title
     productDescription.text = product.description
-    
-    let numberFommatter = NumberFormatter()
-    numberFommatter.numberStyle = .decimal
-    
-    guard let price = numberFommatter.string(from: product.price as NSNumber) else { return }
-    productPrice.text = price + "$"
+    productPrice.text = product.price.numberFormmat(product.price) + "$"
     
     DispatchQueue.global().async { [weak self] in
       if let data = try? Data(contentsOf: product.thumbnail), let image = UIImage(data: data) {
@@ -48,5 +51,6 @@ extension ViewController: ProductManagerDelegate {
       }
     }
   }
+  
 }
 

@@ -17,6 +17,9 @@
 		853A1FAB2BCE6E0E00600D5E /* WishListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853A1FAA2BCE6E0E00600D5E /* WishListTableViewController.swift */; };
 		8563ABD32BCF930A00BB7728 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8563ABD22BCF930A00BB7728 /* Product.swift */; };
 		8563ABD52BCF9A5300BB7728 /* ProductManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8563ABD42BCF9A5300BB7728 /* ProductManager.swift */; };
+		8563AC042BD0BE5900BB7728 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8563AC032BD0BE5900BB7728 /* CoreDataManager.swift */; };
+		8563AC072BD117AF00BB7728 /* WishListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8563AC062BD117AF00BB7728 /* WishListTableViewCell.swift */; };
+		8563AC0A2BD130DF00BB7728 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8563AC092BD130DF00BB7728 /* IntExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		853A1FAA2BCE6E0E00600D5E /* WishListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListTableViewController.swift; sourceTree = "<group>"; };
 		8563ABD22BCF930A00BB7728 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		8563ABD42BCF9A5300BB7728 /* ProductManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductManager.swift; sourceTree = "<group>"; };
+		8563AC032BD0BE5900BB7728 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8563AC062BD117AF00BB7728 /* WishListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListTableViewCell.swift; sourceTree = "<group>"; };
+		8563AC092BD130DF00BB7728 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,11 +70,12 @@
 		853A1F8F2BC91D3C00600D5E /* WishList */ = {
 			isa = PBXGroup;
 			children = (
+				8563AC0B2BD130EA00BB7728 /* Extension */,
+				8563AC082BD12D7300BB7728 /* View */,
+				8563AC052BD1136C00BB7728 /* Controller */,
 				8563ABD62BCF9A8A00BB7728 /* Model */,
 				853A1F902BC91D3C00600D5E /* AppDelegate.swift */,
 				853A1F922BC91D3C00600D5E /* SceneDelegate.swift */,
-				853A1F942BC91D3C00600D5E /* ViewController.swift */,
-				853A1FAA2BCE6E0E00600D5E /* WishListTableViewController.swift */,
 				853A1F962BC91D3C00600D5E /* Main.storyboard */,
 				853A1F9C2BC91D3E00600D5E /* Assets.xcassets */,
 				853A1F9E2BC91D3E00600D5E /* LaunchScreen.storyboard */,
@@ -83,8 +90,34 @@
 			children = (
 				8563ABD42BCF9A5300BB7728 /* ProductManager.swift */,
 				8563ABD22BCF930A00BB7728 /* Product.swift */,
+				8563AC032BD0BE5900BB7728 /* CoreDataManager.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		8563AC052BD1136C00BB7728 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				853A1FAA2BCE6E0E00600D5E /* WishListTableViewController.swift */,
+				853A1F942BC91D3C00600D5E /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		8563AC082BD12D7300BB7728 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8563AC062BD117AF00BB7728 /* WishListTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8563AC0B2BD130EA00BB7728 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8563AC092BD130DF00BB7728 /* IntExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,9 +194,12 @@
 				853A1F9B2BC91D3C00600D5E /* WishList.xcdatamodeld in Sources */,
 				853A1F952BC91D3C00600D5E /* ViewController.swift in Sources */,
 				8563ABD52BCF9A5300BB7728 /* ProductManager.swift in Sources */,
+				8563AC0A2BD130DF00BB7728 /* IntExtension.swift in Sources */,
 				853A1F912BC91D3C00600D5E /* AppDelegate.swift in Sources */,
 				853A1F932BC91D3C00600D5E /* SceneDelegate.swift in Sources */,
+				8563AC072BD117AF00BB7728 /* WishListTableViewCell.swift in Sources */,
 				853A1FAB2BCE6E0E00600D5E /* WishListTableViewController.swift in Sources */,
+				8563AC042BD0BE5900BB7728 /* CoreDataManager.swift in Sources */,
 				8563ABD32BCF930A00BB7728 /* Product.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
