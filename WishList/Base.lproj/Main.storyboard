@@ -101,6 +101,7 @@
                         <outlet property="productImage" destination="Q7J-HJ-i2S" id="lIC-tC-keg"/>
                         <outlet property="productName" destination="qsg-L6-qRS" id="c9h-CJ-c0j"/>
                         <outlet property="productPrice" destination="eyP-s5-p79" id="Efa-rC-F93"/>
+                        <outlet property="showWishListButton" destination="sDe-Vc-7f9" id="iNF-mY-YwA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -143,7 +144,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="이름" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-at-uaD">
-                                            <rect key="frame" x="118" y="10" width="265" height="21"/>
+                                            <rect key="frame" x="118" y="10" width="30" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>

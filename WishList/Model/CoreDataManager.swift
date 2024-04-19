@@ -23,8 +23,6 @@ class CoreDataManager {
       return container
   }()
   
-  //let context = CoreDataManager.shared.persistentContainer.viewContext
-  
   private init() {}
   
   func saveWishProduct(product: Product) {
@@ -38,12 +36,6 @@ class CoreDataManager {
     
     try? context.save()
     
-//    do {
-//      try context.save()
-//      print("Product saved to CoreData")
-//    } catch {
-//      print("Error saving product to CoreData: \(error.localizedDescription)")
-//    }
   }
   
   func fetchWishProduct() -> [Products] {
@@ -57,6 +49,17 @@ class CoreDataManager {
         print("Error fetching products: \(error.localizedDescription)")
         return []
     }
-
+  }
+  
+  func deleteWishProduct(_ wishProduct: Products) {
+    let context = CoreDataManager.shared.persistentContainer.viewContext
+    let request = Products.fetchRequest()
+    
+    guard let products = try? context.fetch(request) else { return }
+    
+    guard let deleteProuct = products.filter({ $0.id == wishProduct.id }).first else { return }
+    
+    context.delete(deleteProuct)
+    try? context.save()
   }
 }
