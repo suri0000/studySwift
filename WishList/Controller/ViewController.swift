@@ -15,6 +15,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var productDescription: UILabel!
   @IBOutlet weak var productName: UILabel!
   @IBOutlet weak var showWishListButton: UIButton!
+  @IBOutlet weak var scrollView: UIScrollView!
   
   let productManager = ProductManager()
   let coreDataManager = CoreDataManager.shared
@@ -24,6 +25,7 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     productManager.delegate = self
     productManager.getProduct()
+    setRefresh()
   }
   
   @IBAction func updateProduct(_ sender: Any) {
@@ -33,6 +35,15 @@ class ViewController: UIViewController {
   @IBAction func addWishList(_ sender: Any) {
     guard let product = currentProduct else { return }
       coreDataManager.saveWishProduct(product: product)
+  }
+  
+  func setRefresh() {
+    scrollView.refreshControl = UIRefreshControl()
+    scrollView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+  }
+  
+  @objc func refresh() {
+    productManager.getProduct()
   }
   
 }
@@ -48,6 +59,7 @@ extension ViewController: ProductManagerDelegate {
       if let data = try? Data(contentsOf: product.thumbnail), let image = UIImage(data: data) {
         DispatchQueue.main.async {
           self?.productImage.image = image
+          self?.scrollView.refreshControl?.endRefreshing()
         }
       }
     }
