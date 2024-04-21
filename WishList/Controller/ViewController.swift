@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 class ViewController: UIViewController {
-
+  
   @IBOutlet weak var productImage: UIImageView!
   @IBOutlet weak var productPrice: UILabel!
   @IBOutlet weak var productDescription: UILabel!
@@ -26,6 +26,14 @@ class ViewController: UIViewController {
     productManager.delegate = self
     productManager.getProduct()
     setRefresh()
+    addBadgeShowWishProductCount()
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "updateBadgeCount" {
+      let wishListTableViewController = segue.destination as? WishListTableViewController
+      wishListTableViewController?.delegate = self
+    }
   }
   
   @IBAction func updateProduct(_ sender: Any) {
@@ -34,7 +42,8 @@ class ViewController: UIViewController {
   
   @IBAction func addWishList(_ sender: Any) {
     guard let product = currentProduct else { return }
-      coreDataManager.saveWishProduct(product: product)
+    coreDataManager.saveWishProduct(product: product)
+    addBadgeShowWishProductCount()
   }
   
   func setRefresh() {
@@ -46,6 +55,28 @@ class ViewController: UIViewController {
     productManager.getProduct()
   }
   
+  func addBadgeShowWishProductCount() {
+    let badge = UILabel()
+    
+    badge.text = "\(coreDataManager.fetchWishProduct().count)"
+    badge.font = UIFont.systemFont(ofSize: 10)
+    badge.backgroundColor = .black
+    badge.textColor = .white
+    badge.textAlignment = .center
+    badge.clipsToBounds = true
+    badge.layer.cornerRadius = 10
+    
+    showWishListButton.superview?.addSubview(badge)
+    
+    badge.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      badge.topAnchor.constraint(equalTo: showWishListButton.topAnchor),
+      badge.trailingAnchor.constraint(equalTo: showWishListButton.trailingAnchor, constant: -10),
+      badge.widthAnchor.constraint(equalToConstant: 20),
+      badge.heightAnchor.constraint(equalToConstant: 20)
+    ])
+  }
+
 }
 
 extension ViewController: ProductManagerDelegate {
@@ -65,5 +96,11 @@ extension ViewController: ProductManagerDelegate {
     }
   }
   
+}
+
+extension ViewController: WishListTableViewDelegate {
+  func updateBadge() {
+    addBadgeShowWishProductCount()
+  }
 }
 

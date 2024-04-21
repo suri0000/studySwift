@@ -12,7 +12,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="WishList" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="WishList" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -46,13 +46,13 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <segue destination="ils-Jp-UWK" kind="show" id="n9E-az-bNC"/>
+                                    <segue destination="ils-Jp-UWK" kind="show" identifier="updateBadgeCount" id="n9E-az-bNC"/>
                                 </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0nF-3w-BjA">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0nF-3w-BjA">
                                 <rect key="frame" x="0.0" y="98" width="393" height="670"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vUV-oi-Ina">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vUV-oi-Ina">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="670"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q7J-HJ-i2S">
@@ -87,6 +87,7 @@
                                             <constraint firstItem="s7t-z1-Qtq" firstAttribute="top" secondItem="qsg-L6-qRS" secondAttribute="bottom" constant="5" id="8Ea-c9-Aya"/>
                                             <constraint firstItem="eyP-s5-p79" firstAttribute="top" secondItem="s7t-z1-Qtq" secondAttribute="bottom" constant="20" id="Dwt-Du-0C4"/>
                                             <constraint firstItem="Q7J-HJ-i2S" firstAttribute="top" secondItem="vUV-oi-Ina" secondAttribute="top" id="F1p-2N-qSf"/>
+                                            <constraint firstItem="eyP-s5-p79" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vUV-oi-Ina" secondAttribute="leading" constant="20" symbolic="YES" id="Hvr-Yk-0Qa"/>
                                             <constraint firstAttribute="trailing" secondItem="eyP-s5-p79" secondAttribute="trailing" constant="15" id="TdP-s3-867"/>
                                             <constraint firstItem="Q7J-HJ-i2S" firstAttribute="leading" secondItem="vUV-oi-Ina" secondAttribute="leading" id="Ulw-Oy-nuk"/>
                                             <constraint firstAttribute="trailing" secondItem="s7t-z1-Qtq" secondAttribute="trailing" constant="10" id="e1q-Cv-Col"/>
@@ -99,6 +100,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="vUV-oi-Ina" firstAttribute="width" secondItem="q03-OI-wS7" secondAttribute="width" id="Ox5-af-pNf"/>
+                                    <constraint firstItem="vUV-oi-Ina" firstAttribute="bottom" secondItem="q03-OI-wS7" secondAttribute="bottom" id="iUn-FG-c4d"/>
                                     <constraint firstItem="vUV-oi-Ina" firstAttribute="leading" secondItem="ojX-vK-Su8" secondAttribute="leading" id="jdN-g9-F3C"/>
                                     <constraint firstItem="vUV-oi-Ina" firstAttribute="trailing" secondItem="ojX-vK-Su8" secondAttribute="trailing" id="kux-2T-2mw"/>
                                     <constraint firstItem="vUV-oi-Ina" firstAttribute="bottom" secondItem="ojX-vK-Su8" secondAttribute="bottom" id="xWM-kn-zvy"/>
@@ -112,6 +114,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="0nF-3w-BjA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="1P0-VN-gv0"/>
+                            <constraint firstItem="sDe-Vc-7f9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="ERI-jI-Kzj"/>
                             <constraint firstItem="Sri-j0-LNa" firstAttribute="top" secondItem="0nF-3w-BjA" secondAttribute="bottom" constant="10" id="Ebv-0u-mhc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sDe-Vc-7f9" secondAttribute="trailing" constant="5" id="LA5-NI-uLj"/>
                             <constraint firstItem="sDe-Vc-7f9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="LPR-fi-dgd"/>
@@ -140,7 +143,7 @@
         <!--Wish List Table View Controller-->
         <scene sceneID="vAJ-Pe-0Ll">
             <objects>
-                <tableViewController id="ils-Jp-UWK" customClass="WishListTableViewController" customModule="WishList" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="WishListTableViewController" id="ils-Jp-UWK" customClass="WishListTableViewController" customModule="WishList" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" sectionIndexMinimumDisplayRowCount="1" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="O5J-mO-heO">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

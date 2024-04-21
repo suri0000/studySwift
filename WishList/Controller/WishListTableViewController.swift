@@ -7,18 +7,21 @@
 
 import UIKit
 
+protocol WishListTableViewDelegate: AnyObject {
+  func updateBadge()
+}
+
 class WishListTableViewController: UITableViewController {
   
   let coreDataManager = CoreDataManager.shared
+  weak var delegate: WishListTableViewDelegate?
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = false
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    self.delegate?.updateBadge()
   }
   
   // MARK: - Table view data source
@@ -45,9 +48,7 @@ class WishListTableViewController: UITableViewController {
       URLSession.shared.dataTask(with: thumbnailURL) { (data, response, error) in
         guard let data = data, error == nil else { return }
         
-        // 썸네일 이미지 데이터를 UIImage로 변환
         if let thumbnailImage = UIImage(data: data) {
-          // UITableViewCell의 이미지뷰에 이미지 설정 (UI 업데이트는 메인 스레드에서 수행되어야 함)
           DispatchQueue.main.async {
             cell.wishProductImage.image = thumbnailImage
           }
@@ -90,7 +91,6 @@ class WishListTableViewController: UITableViewController {
     if editingStyle == .delete {
       coreDataManager.deleteWishProduct(wishProductList[indexPath.row])
       tableView.deleteRows(at: [indexPath], with: .automatic)
-      
     }
   }
   
