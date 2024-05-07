@@ -17,6 +17,27 @@ class SearchViewController: UIViewController {
     return searchBar
   }()
   
+//  let recentlyViewedBookTitle = UILabel(text: "최근 본 책")
+  let searchResultTitle = UILabel(text: "검색 결과")
+//  
+//  let recentlyViewedBookCollectionViewLayout: UICollectionViewFlowLayout = {
+//    let layout = UICollectionViewFlowLayout()
+//    layout.scrollDirection = .horizontal
+//    
+//    let spacing: CGFloat = 10
+//    layout.minimumLineSpacing = spacing
+//    
+//    return layout
+//  }()
+//  
+//  lazy var recentlyViewedBookCollectionView: UICollectionView = {
+//    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: recentlyViewedBookCollectionViewLayout)
+//    
+//    collectionView.backgroundColor = .cyan
+//    
+//    return collectionView
+//  }()
+  
   let searchResultsCollectionViewLayout: UICollectionViewFlowLayout = {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .vertical
@@ -43,8 +64,18 @@ class SearchViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.view.backgroundColor = .white
+    
     setLayout()
     setCollectionView()
+  }
+  
+  func setHeader(title: String) -> UILabel {
+    let label = UILabel()
+    label.text = title
+    label.adjustsFontForContentSizeCategory = true
+    label.font = UIFont.preferredFont(for: .title1, weight: .bold)
+    
+    return label
   }
   
   func setLayout() {
@@ -54,9 +85,27 @@ class SearchViewController: UIViewController {
       $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(5)
     }
     
+//    view.addSubview(recentlyViewedBookTitle)
+//    recentlyViewedBookTitle.snp.makeConstraints {
+//      $0.top.equalTo(searchBar.snp.bottom).offset(10)
+//      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
+//    }
+//    
+//    view.addSubview(recentlyViewedBookCollectionView)
+//    recentlyViewedBookCollectionView.snp.makeConstraints {
+//      $0.top.equalTo(recentlyViewedBookTitle.snp.bottom).offset(20)
+//      $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(15)
+//    }
+    
+    view.addSubview(searchResultTitle)
+    searchResultTitle.snp.makeConstraints {
+      $0.top.equalTo(searchBar.snp.bottom).offset(20)
+      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
+    }
+    
     view.addSubview(searchResultsCollectionView)
     searchResultsCollectionView.snp.makeConstraints {
-      $0.top.equalTo(searchBar.snp.bottom).offset(20)
+      $0.top.equalTo(searchResultTitle.snp.bottom).offset(20)
       $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
     }
   }
