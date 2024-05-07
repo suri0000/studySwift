@@ -10,17 +10,16 @@ import UIKit
 
 class SearchViewController: UIViewController {
   
-  let searchBar = UISearchBar()
+  lazy var searchBar: UISearchBar = {
+    let searchBar = UISearchBar()
+    searchBar.searchBarStyle = .minimal
+    searchBar.placeholder = "책 제목을 검색해 주세요"
+    return searchBar
+  }()
 
   override func viewDidLoad() {
     super.viewDidLoad()
     setLayout()
-    setSerchBar()
-  }
-  
-  func setSerchBar() {
-    searchBar.searchBarStyle = .minimal
-    searchBar.placeholder = "책 제목을 검색해 주세요"
   }
   
   func setLayout() {
