@@ -9,13 +9,12 @@ import UIKit
 
 class BookDetailViewController: UIViewController {
   
-  var document: Document?
-  
+  let detailView = DetailView()
+      
   private let contentScrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.translatesAutoresizingMaskIntoConstraints = false
-    scrollView.backgroundColor = .blue
-    //scrollView.showsVerticalScrollIndicator = false
+    scrollView.showsVerticalScrollIndicator = false
     
     return scrollView
   }()
@@ -23,7 +22,7 @@ class BookDetailViewController: UIViewController {
   private let contentView: UIView = {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
-    view.backgroundColor = .white
+    
     return view
   }()
   
@@ -51,13 +50,13 @@ class BookDetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
-    
     setLayout()
   }
   
   private func setLayout() {
     view.addSubview(contentScrollView)
     contentScrollView.addSubview(contentView)
+    contentView.addSubview(detailView)
     view.addSubview(closeButton)
     view.addSubview(addButton)
     
@@ -77,9 +76,14 @@ class BookDetailViewController: UIViewController {
     }
     
     contentView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
-      make.width.equalToSuperview()
+      make.edges.width.equalTo(contentScrollView)
     }
+    
+    detailView.snp.makeConstraints { make in
+      make.edges.equalTo(contentView)
+    }
+    
+    contentScrollView.contentSize = contentView.bounds.size
   }
   
   @objc func closeButtonTapped() {

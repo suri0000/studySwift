@@ -12,6 +12,7 @@ class SearchViewController: UIViewController {
   
   let viewModel = SearchResultViewModel()
   var documents: [Document] = []
+  var didTappedCell: ((Document) -> Void)?
   
   lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()
@@ -154,8 +155,9 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let selectedDocument = documents[indexPath.item]
     let bookDetailViewController = BookDetailViewController()
+    let detailView = bookDetailViewController.detailView
     
-    bookDetailViewController.document = selectedDocument
+    detailView.didSelectItem = selectedDocument
     
     present(bookDetailViewController, animated: true, completion: nil)
   }
