@@ -69,7 +69,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     bookTitle.text = book.title
     authors.text = book.authors.joined(separator: ", ")
     
-    viewModel.fetchBookImage(document: book) { [weak self] result in
+    NetworkManager.shared.fetchBookImage(document: book) { [weak self] result in
       switch result {
         case .success(let image):
           DispatchQueue.main.async {
