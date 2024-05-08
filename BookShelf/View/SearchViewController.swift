@@ -22,26 +22,26 @@ class SearchViewController: UIViewController {
   
   let noResultLable = UILabel()
   
-//  let recentlyViewedBookTitle = UILabel(text: "최근 본 책")
+  //  let recentlyViewedBookTitle = UILabel(text: "최근 본 책")
   let searchResultTitle = UILabel(text: "검색 결과")
-//  
-//  let recentlyViewedBookCollectionViewLayout: UICollectionViewFlowLayout = {
-//    let layout = UICollectionViewFlowLayout()
-//    layout.scrollDirection = .horizontal
-//    
-//    let spacing: CGFloat = 10
-//    layout.minimumLineSpacing = spacing
-//    
-//    return layout
-//  }()
-//  
-//  lazy var recentlyViewedBookCollectionView: UICollectionView = {
-//    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: recentlyViewedBookCollectionViewLayout)
-//    
-//    collectionView.backgroundColor = .cyan
-//    
-//    return collectionView
-//  }()
+  //
+  //  let recentlyViewedBookCollectionViewLayout: UICollectionViewFlowLayout = {
+  //    let layout = UICollectionViewFlowLayout()
+  //    layout.scrollDirection = .horizontal
+  //
+  //    let spacing: CGFloat = 10
+  //    layout.minimumLineSpacing = spacing
+  //
+  //    return layout
+  //  }()
+  //
+  //  lazy var recentlyViewedBookCollectionView: UICollectionView = {
+  //    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: recentlyViewedBookCollectionViewLayout)
+  //
+  //    collectionView.backgroundColor = .cyan
+  //
+  //    return collectionView
+  //  }()
   
   let searchResultsCollectionViewLayout: UICollectionViewFlowLayout = {
     let layout = UICollectionViewFlowLayout()
@@ -67,7 +67,7 @@ class SearchViewController: UIViewController {
   }()
   
   // MARK: - ViewDidLoad
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     self.view.backgroundColor = .white
@@ -90,17 +90,17 @@ class SearchViewController: UIViewController {
       $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(5)
     }
     
-//    view.addSubview(recentlyViewedBookTitle)
-//    recentlyViewedBookTitle.snp.makeConstraints {
-//      $0.top.equalTo(searchBar.snp.bottom).offset(10)
-//      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
-//    }
-//    
-//    view.addSubview(recentlyViewedBookCollectionView)
-//    recentlyViewedBookCollectionView.snp.makeConstraints {
-//      $0.top.equalTo(recentlyViewedBookTitle.snp.bottom).offset(20)
-//      $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(15)
-//    }
+    //    view.addSubview(recentlyViewedBookTitle)
+    //    recentlyViewedBookTitle.snp.makeConstraints {
+    //      $0.top.equalTo(searchBar.snp.bottom).offset(10)
+    //      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
+    //    }
+    //
+    //    view.addSubview(recentlyViewedBookCollectionView)
+    //    recentlyViewedBookCollectionView.snp.makeConstraints {
+    //      $0.top.equalTo(recentlyViewedBookTitle.snp.bottom).offset(20)
+    //      $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(15)
+    //    }
     
     searchResultTitle.snp.makeConstraints {
       $0.top.equalTo(searchBar.snp.bottom).offset(20)
@@ -128,7 +128,7 @@ class SearchViewController: UIViewController {
       make.center.equalToSuperview()
     }
   }
-
+  
 }
 
 // MARK: - CollectionView
@@ -162,26 +162,26 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 // MARK: - UISearchBar
 
 extension SearchViewController: UISearchBarDelegate {
-
+  
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     guard let searchKeyword = searchBar.text else { return }
     
-    viewModel.fetchBookAPI(query: searchKeyword) { [weak self] result in
-          switch result {
-          case .success(let book):
-              self?.documents = book.documents
-              DispatchQueue.main.async {
-                if self?.documents.isEmpty ?? true  {
-                  self?.noResult()
-                } else {
-                  self?.noResultLable.removeFromSuperview()
-                }
-                self?.searchResultsCollectionView.reloadData()
-              }
-          case .failure(let error):
-              print("Error loading data: \(error)")
+    NetworkManager.shared.fetchBookAPI(query: searchKeyword) { [weak self] result in
+      switch result {
+        case .success(let book):
+          self?.documents = book.documents
+          DispatchQueue.main.async {
+            if self?.documents.isEmpty ?? true  {
+              self?.noResult()
+            } else {
+              self?.noResultLable.removeFromSuperview()
+            }
+            self?.searchResultsCollectionView.reloadData()
           }
+        case .failure(let error):
+          print("Error loading data: \(error)")
       }
+    }
   }
   
   
