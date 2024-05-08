@@ -34,6 +34,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       items[1].title = "책"
     }
     
+    UITabBar.appearance().backgroundColor = .white
+    
     window?.rootViewController = tabBarController
     window?.makeKeyAndVisible()
   }
