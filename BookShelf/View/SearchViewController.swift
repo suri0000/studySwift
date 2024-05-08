@@ -10,12 +10,17 @@ import UIKit
 
 class SearchViewController: UIViewController {
   
+  let viewModel = SearchResultViewModel()
+  var documents: [Document] = []
+  
   lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.searchBarStyle = .minimal
     searchBar.placeholder = "책 제목을 검색해 주세요"
     return searchBar
   }()
+  
+  let noResultLable = UILabel()
   
 //  let recentlyViewedBookTitle = UILabel(text: "최근 본 책")
   let searchResultTitle = UILabel(text: "검색 결과")
@@ -60,6 +65,8 @@ class SearchViewController: UIViewController {
     collectionView.showsVerticalScrollIndicator = false
     return collectionView
   }()
+  
+  // MARK: - ViewDidLoad
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -67,19 +74,17 @@ class SearchViewController: UIViewController {
     
     setLayout()
     setCollectionView()
+    
+    searchBar.delegate = self
   }
   
-  func setHeader(title: String) -> UILabel {
-    let label = UILabel()
-    label.text = title
-    label.adjustsFontForContentSizeCategory = true
-    label.font = UIFont.preferredFont(for: .title1, weight: .bold)
-    
-    return label
-  }
+  // MARK: - UI관련 함수들
   
   func setLayout() {
     view.addSubview(searchBar)
+    view.addSubview(searchResultTitle)
+    view.addSubview(searchResultsCollectionView)
+    
     searchBar.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
       $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(5)
@@ -97,13 +102,11 @@ class SearchViewController: UIViewController {
 //      $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(15)
 //    }
     
-    view.addSubview(searchResultTitle)
     searchResultTitle.snp.makeConstraints {
       $0.top.equalTo(searchBar.snp.bottom).offset(20)
       $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
     }
     
-    view.addSubview(searchResultsCollectionView)
     searchResultsCollectionView.snp.makeConstraints {
       $0.top.equalTo(searchResultTitle.snp.bottom).offset(20)
       $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
@@ -115,19 +118,32 @@ class SearchViewController: UIViewController {
     searchResultsCollectionView.dataSource = self
     
     searchResultsCollectionView.register(SearchResultsCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultsCollectionViewCell.identifier)
+  }
+  
+  func noResult() {
+    noResultLable.text = "검색 결과가 없습니다."
     
-    searchResultsCollectionView.backgroundColor = .brown
+    self.view.addSubview(noResultLable)
+    noResultLable.snp.makeConstraints { make in
+      //make.top.equalTo(searchResultTitle.snp.bottom).offset(20)
+      make.center.equalToSuperview()
+    }
   }
 
 }
 
+// MARK: - CollectionView
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+  
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 10
+    return documents.count
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
+    
+    let document = documents[indexPath.item]
+    cell.configureUI(book: document)
     
     return cell
   }
@@ -135,7 +151,30 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
   
 }
 
-#Preview {
-  SearchViewController()
-}
+// MARK: - UISearchBar
 
+extension SearchViewController: UISearchBarDelegate {
+
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    guard let searchKeyword = searchBar.text else { return }
+    
+    viewModel.fetchBookAPI(query: searchKeyword) { [weak self] result in
+          switch result {
+          case .success(let book):
+              self?.documents = book.documents
+              DispatchQueue.main.async {
+                if self?.documents.isEmpty ?? true  {
+                  self?.noResult()
+                } else {
+                  self?.noResultLable.removeFromSuperview()
+                }
+                self?.searchResultsCollectionView.reloadData()
+              }
+          case .failure(let error):
+              print("Error loading data: \(error)")
+          }
+      }
+  }
+  
+  
+}

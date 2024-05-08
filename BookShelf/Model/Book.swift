@@ -7,10 +7,6 @@
 
 import Foundation
 
-//   let book = try? JSONDecoder().decode(Book.self, from: jsonData)
-
-import Foundation
-
 // MARK: - Book
 struct Book: Codable {
     let meta: Meta

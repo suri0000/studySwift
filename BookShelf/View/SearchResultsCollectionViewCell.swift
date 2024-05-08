@@ -10,26 +10,25 @@ import UIKit
 
 class SearchResultsCollectionViewCell: UICollectionViewCell {
   static let identifier = String(describing: SearchResultsCollectionViewCell.self)
+  let viewModel = SearchResultViewModel()
   
   lazy var bookImage: UIImageView = {
     let bookImage = UIImageView()
-    bookImage.image = UIImage(systemName: "star")
-    bookImage.backgroundColor = .lightGray
     bookImage.contentMode = .scaleAspectFit
     return bookImage
   }()
   
   lazy var bookTitle: UILabel = {
     let bookTitle = UILabel()
-    bookTitle.text = "유니버스"
-    bookTitle.backgroundColor = .white
+    bookTitle.textAlignment = .center
+    bookTitle.font = UIFont.preferredFont(for: .body, weight: .bold)
+    
     return bookTitle
   }()
   
   lazy var authors: UILabel = {
     let authors = UILabel()
-    authors.text = "닐 타이슨"
-    authors.backgroundColor = .green
+    authors.textAlignment = .center
     return authors
   }()
   
@@ -43,14 +42,13 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
   }
   
   func setLayout() {
-    contentView.backgroundColor = .blue
-    
     contentView.addSubview(bookImage)
     contentView.addSubview(bookTitle)
     contentView.addSubview(authors)
     
     bookImage.snp.makeConstraints {
       $0.top.leading.trailing.equalToSuperview()
+      $0.height.equalToSuperview().multipliedBy(2.0 / 3.0)
     }
     
     bookTitle.snp.makeConstraints {
@@ -64,6 +62,22 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
       $0.horizontalEdges.greaterThanOrEqualToSuperview().inset(10)
       $0.top.equalTo(bookTitle.snp.bottom).offset(5)
       $0.bottom.equalToSuperview().inset(5)
+    }
+  }
+  
+  func configureUI(book: Document) {
+    bookTitle.text = book.title
+    authors.text = book.authors.joined(separator: ", ")
+    
+    viewModel.fetchBookImage(document: book) { [weak self] result in
+      switch result {
+        case .success(let image):
+          DispatchQueue.main.async {
+            self?.bookImage.image = image
+          }
+        case .failure(let error):
+          print("Error fetching book image: \(error)")
+      }
     }
   }
 }
