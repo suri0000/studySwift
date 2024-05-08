@@ -15,8 +15,10 @@ class SearchViewController: UIViewController {
   
   lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()
+    
     searchBar.searchBarStyle = .minimal
     searchBar.placeholder = "책 제목을 검색해 주세요"
+    
     return searchBar
   }()
   
@@ -45,16 +47,15 @@ class SearchViewController: UIViewController {
   
   let searchResultsCollectionViewLayout: UICollectionViewFlowLayout = {
     let layout = UICollectionViewFlowLayout()
-    layout.scrollDirection = .vertical
-    
     let spacing: CGFloat = 20
-    layout.minimumLineSpacing = spacing
-    layout.minimumInteritemSpacing = spacing
-    
     let deviceWidth = UIScreen.main.bounds.width
     let itemInLine: CGFloat = 2
     let inset: CGFloat = 15
     let cellWidth = (deviceWidth - spacing - 1 - inset * 2) / itemInLine
+    
+    layout.scrollDirection = .vertical
+    layout.minimumLineSpacing = spacing
+    layout.minimumInteritemSpacing = spacing
     layout.itemSize = .init(width: cellWidth, height: cellWidth + 20)
     
     return layout
@@ -62,7 +63,9 @@ class SearchViewController: UIViewController {
   
   lazy var searchResultsCollectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: searchResultsCollectionViewLayout)
+    
     collectionView.showsVerticalScrollIndicator = false
+    
     return collectionView
   }()
   
@@ -142,6 +145,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
     
     let document = documents[indexPath.item]
+    
     cell.configureUI(book: document)
     
     return cell
@@ -149,11 +153,10 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let selectedDocument = documents[indexPath.item]
-    
     let bookDetailViewController = BookDetailViewController()
+    
     bookDetailViewController.document = selectedDocument
     
-    // 모달로 표시
     present(bookDetailViewController, animated: true, completion: nil)
   }
   
@@ -170,14 +173,17 @@ extension SearchViewController: UISearchBarDelegate {
       switch result {
         case .success(let book):
           self?.documents = book.documents
+          
           DispatchQueue.main.async {
             if self?.documents.isEmpty ?? true  {
               self?.noResult()
             } else {
               self?.noResultLable.removeFromSuperview()
             }
+            
             self?.searchResultsCollectionView.reloadData()
           }
+          
         case .failure(let error):
           print("Error loading data: \(error)")
       }
