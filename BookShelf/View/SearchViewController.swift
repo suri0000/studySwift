@@ -125,7 +125,6 @@ class SearchViewController: UIViewController {
     
     self.view.addSubview(noResultLable)
     noResultLable.snp.makeConstraints { make in
-      //make.top.equalTo(searchResultTitle.snp.bottom).offset(20)
       make.center.equalToSuperview()
     }
   }
@@ -148,6 +147,15 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     return cell
   }
   
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let selectedDocument = documents[indexPath.item]
+    
+    let bookDetailViewController = BookDetailViewController()
+    bookDetailViewController.document = selectedDocument
+    
+    // 모달로 표시
+    present(bookDetailViewController, animated: true, completion: nil)
+  }
   
 }
 

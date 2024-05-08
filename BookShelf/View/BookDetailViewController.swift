@@ -8,9 +8,15 @@
 import UIKit
 
 class BookDetailViewController: UIViewController {
+  
+  var document: Document?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+      view.backgroundColor = .white
     }
+  
+  
+  
 
 }
