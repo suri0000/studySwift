@@ -5,6 +5,7 @@
 //  Created by 예슬 on 5/3/24.
 //
 
+import SnapKit
 import UIKit
 
 class BookListViewController: UIViewController {
@@ -22,7 +23,7 @@ class BookListViewController: UIViewController {
     let button = UIButton()
     
     button.setTitle("전체 삭제", for: .normal)
-    button.tintColor = .systemGray4
+    button.setTitleColor(.systemGray3, for: .normal)
     button.addTarget(BookListViewController.self, action: #selector(tabbedDeleteAllButton), for: .touchUpInside)
     
     return button
@@ -32,7 +33,7 @@ class BookListViewController: UIViewController {
     let button = UIButton()
     
     button.setTitle("추가", for: .normal)
-    button.tintColor = .systemBlue
+    button.setTitleColor(.orange, for: .normal)
     button.addTarget(BookListViewController.self, action: #selector(addButtonTabbed), for: .touchUpInside)
     
     return button
@@ -58,6 +59,7 @@ class BookListViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: bookListCollectionViewFlowLayout)
     
     collectionView.showsVerticalScrollIndicator = false
+    collectionView.backgroundColor = .orange
     
     return collectionView
   }()
@@ -76,6 +78,23 @@ class BookListViewController: UIViewController {
     bookListTitle.snp.makeConstraints { make in
       make.top.equalTo(view.safeAreaLayoutGuide)
       make.centerX.equalToSuperview()
+    }
+    
+    addButton.snp.makeConstraints { make in
+      make.top.equalTo(view.safeAreaLayoutGuide)
+      make.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+      make.centerY.equalTo(bookListTitle)
+    }
+    
+    deleteAllButton.snp.makeConstraints { make in
+      make.top.equalTo(view.safeAreaLayoutGuide)
+      make.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
+      make.centerY.equalTo(bookListTitle)
+    }
+    
+    bookListCollectionView.snp.makeConstraints { make in
+      make.top.equalTo(bookListTitle.snp.bottom).inset(-10)
+      make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
     }
   }
   
