@@ -57,4 +57,19 @@ class NetworkManager {
       task.resume()
     }
   }
+  
+  func fetchSelectedBookImage(document: AddedBook, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    if let url = URL(string: document.thumbnail ?? "") {
+      let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        if let error = error {
+          completion(.failure(error))
+        }
+        if let data = data {
+          let bookImage = UIImage(data: data)
+          completion(.success(bookImage!))
+        }
+      }
+      task.resume()
+    }
+  }
 }

@@ -5,6 +5,7 @@
 //  Created by 예슬 on 5/3/24.
 //
 
+import CoreData
 import UIKit
 
 @main
@@ -31,6 +32,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
   }
 
+  // MARK: - Core Data stack
+
+  lazy var persistentContainer: NSPersistentContainer = {
+      let container = NSPersistentContainer(name: "AddedBook")
+      container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+          if let error = error as NSError? {
+              fatalError("Unresolved error \(error), \(error.userInfo)")
+          }
+      })
+      return container
+  }()
+
+  // MARK: - Core Data Saving support
+  // core data의 현재 상태 저장
+  // 앱이 종료되는 어플리케이션윌터미네이터와 같은 메서드에서 호출하여 사용
+  func saveContext() {
+      let context = persistentContainer.viewContext
+      if context.hasChanges {
+          do {
+              try context.save()
+          } catch {
+              let nserror = error as NSError
+              fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+          }
+      }
+  }
 
 }
 

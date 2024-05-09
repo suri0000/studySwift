@@ -10,7 +10,6 @@ import UIKit
 
 class SearchResultsCollectionViewCell: UICollectionViewCell {
   static let identifier = String(describing: SearchResultsCollectionViewCell.self)
-  let viewModel = SearchResultViewModel()
   
   lazy var bookImage: UIImageView = {
     let bookImage = UIImageView()

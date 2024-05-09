@@ -5,12 +5,15 @@
 //  Created by 예슬 on 5/3/24.
 //
 
+import SnapKit
 import UIKit
 
 class BookDetailViewController: UIViewController {
   
+  var bookData: Document?
+  
   let detailView = DetailView()
-      
+  
   private let contentScrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +35,7 @@ class BookDetailViewController: UIViewController {
     
     button.setImage(UIImage(systemName: "x.circle.fill", withConfiguration: imageConfig), for: .normal)
     button.tintColor = .systemGray4
-    button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+    button.addTarget(self, action: #selector(closeButtonTabbed), for: .touchUpInside)
     
     return button
   }()
@@ -42,7 +45,7 @@ class BookDetailViewController: UIViewController {
     let button = UIButton(configuration: buttonConfig)
     
     button.setTitle("담기", for: .normal)
-    button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+    button.addTarget(self, action: #selector(addBookButtonTabbed), for: .touchUpInside)
     
     return button
   }()
@@ -86,12 +89,14 @@ class BookDetailViewController: UIViewController {
     contentScrollView.contentSize = contentView.bounds.size
   }
   
-  @objc func closeButtonTapped() {
-      self.dismiss(animated: true, completion: nil)
+  @objc func closeButtonTabbed() {
+    self.dismiss(animated: true, completion: nil)
   }
   
-  @objc func addButtonTapped() {
-      self.dismiss(animated: true, completion: nil)
+  @objc func addBookButtonTabbed() {
+    guard let book = bookData else { return }
+    CoreDataManager.shared.saveBook(book)
+    self.dismiss(animated: true, completion: nil)
   }
   
 }
