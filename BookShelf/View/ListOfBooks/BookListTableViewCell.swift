@@ -20,15 +20,17 @@ class BookListTableViewCell: UITableViewCell {
   
   private lazy var bookTitle: UILabel = {
     let label = UILabel()
-    label.textAlignment = .center
+    label.textAlignment = .left
     label.font = UIFont.preferredFont(for: .body, weight: .bold)
+    label.numberOfLines = 0
     
     return label
   }()
   
   private lazy var author: UILabel = {
     let label = UILabel()
-    label.textAlignment = .center
+    label.textAlignment = .left
+    label.numberOfLines = 0
     return label
   }()
   
@@ -49,16 +51,21 @@ class BookListTableViewCell: UITableViewCell {
     
     bookImage.snp.makeConstraints { make in
       make.top.leading.equalToSuperview().inset(10)
+      make.bottom.equalToSuperview().inset(10)
+      make.width.equalTo(contentView.snp.width).multipliedBy(1.0 / 3.0)
     }
     
     bookTitle.snp.makeConstraints { make in
-      make.top.equalTo(bookImage.snp.top).inset(10)
+      //make.top.equalTo(contentView.snp.centerY)
+      make.top.equalTo(bookImage.snp.top).inset(50)
       make.leading.equalTo(bookImage.snp.trailing).offset(10)
+      //make.trailing.greaterThanOrEqualToSuperview()
     }
     
     author.snp.makeConstraints { make in
       make.top.equalTo(bookTitle.snp.bottom).offset(10)
       make.leading.equalTo(bookTitle.snp.leading)
+      make.trailing.lessThanOrEqualTo(contentView.snp.trailing).offset(-10)
     }
   }
   

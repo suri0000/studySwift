@@ -56,6 +56,7 @@ class BookListViewController: UIViewController {
     bookListTableView.delegate = self
     bookListTableView.dataSource = self
     bookListTableView.register(BookListTableViewCell.self, forCellReuseIdentifier: BookListTableViewCell.identifier)
+    bookListTableView.reloadData()
     setConstraints()
   }
   
@@ -112,5 +113,8 @@ extension BookListViewController: UITableViewDelegate, UITableViewDataSource {
     return cell
   }
   
-  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    let height = tableView.bounds.height / 3
+    return CGFloat(height)
+  }
 }
