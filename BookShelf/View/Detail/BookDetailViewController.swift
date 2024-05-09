@@ -5,9 +5,12 @@
 //  Created by 예슬 on 5/3/24.
 //
 
+import SnapKit
 import UIKit
 
 class BookDetailViewController: UIViewController {
+  
+  var bookData: Document?
   
   let detailView = DetailView()
       
@@ -91,7 +94,9 @@ class BookDetailViewController: UIViewController {
   }
   
   @objc func addButtonTabbed() {
-      self.dismiss(animated: true, completion: nil)
+    guard let book = bookData else { return }
+    CoreDataManager.shared.saveBook(book)
+    self.dismiss(animated: true, completion: nil)
   }
   
 }

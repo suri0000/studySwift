@@ -10,6 +10,8 @@ import UIKit
 
 class BookListViewController: UIViewController {
   
+  var addedBook: [AddedBook] = []
+  
   private lazy var bookListTitle: UILabel = {
     let label = UILabel()
     
@@ -39,39 +41,26 @@ class BookListViewController: UIViewController {
     return button
   }()
   
-  private let bookListCollectionViewFlowLayout: UICollectionViewFlowLayout = {
-    let layout = UICollectionViewFlowLayout()
-    let spacing: CGFloat = 20
-    let deviceWidth = UIScreen.main.bounds.width
-    let itemInLine: CGFloat = 2
-    let inset: CGFloat = 15
-    let cellWidth = (deviceWidth - spacing - 1 - inset * 2) / itemInLine
+  private lazy var bookListTableView: UITableView = {
+    let tableView = UITableView()
+    tableView.backgroundColor = .orange
     
-    layout.scrollDirection = .vertical
-    layout.minimumLineSpacing = spacing
-    layout.minimumInteritemSpacing = spacing
-    layout.itemSize = .init(width: cellWidth, height: cellWidth + 20)
-    
-    return layout
+    return tableView
   }()
   
-  private lazy var bookListCollectionView: UICollectionView = {
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: bookListCollectionViewFlowLayout)
-    
-    collectionView.showsVerticalScrollIndicator = false
-    collectionView.backgroundColor = .orange
-    
-    return collectionView
-  }()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
+    addedBook = CoreDataManager.shared.fetchBook()
+    bookListTableView.delegate = self
+    bookListTableView.dataSource = self
+    bookListTableView.register(BookListTableViewCell.self, forCellReuseIdentifier: BookListTableViewCell.identifier)
     setConstraints()
   }
   
   private func setConstraints() {
-    [bookListTitle, addButton, deleteAllButton, bookListCollectionView].forEach {
+    [bookListTitle, addButton, deleteAllButton, bookListTableView].forEach {
       view.addSubview($0)
     }
     
@@ -92,10 +81,11 @@ class BookListViewController: UIViewController {
       make.centerY.equalTo(bookListTitle)
     }
     
-    bookListCollectionView.snp.makeConstraints { make in
+    bookListTableView.snp.makeConstraints { make in
       make.top.equalTo(bookListTitle.snp.bottom).inset(-10)
       make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
     }
+    
   }
   
   @objc func tabbedDeleteAllButton() {
@@ -105,5 +95,22 @@ class BookListViewController: UIViewController {
   @objc func addButtonTabbed() {
     
   }
+  
+}
+
+extension BookListViewController: UITableViewDelegate, UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return addedBook.count
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.identifier, for: indexPath) as? BookListTableViewCell else { return UITableViewCell() }
+    
+    let book = addedBook[indexPath.row]
+    cell.configureUI(book: book)
+    
+    return cell
+  }
+  
   
 }

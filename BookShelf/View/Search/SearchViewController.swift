@@ -157,6 +157,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     let detailView = bookDetailViewController.detailView
     
     detailView.didSelectItem = selectedDocument
+    bookDetailViewController.bookData = selectedDocument
     
     present(bookDetailViewController, animated: true, completion: nil)
   }
