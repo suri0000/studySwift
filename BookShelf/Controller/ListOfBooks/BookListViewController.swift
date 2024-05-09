@@ -101,7 +101,7 @@ class BookListViewController: UIViewController {
   }
   
   @objc func addButtonTabbed() {
-    
+    self.tabBarController?.selectedIndex = 0
   }
   
 }
