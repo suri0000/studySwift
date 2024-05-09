@@ -32,7 +32,7 @@ class BookDetailViewController: UIViewController {
     
     button.setImage(UIImage(systemName: "x.circle.fill", withConfiguration: imageConfig), for: .normal)
     button.tintColor = .systemGray4
-    button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+    button.addTarget(self, action: #selector(closeButtonTabbed), for: .touchUpInside)
     
     return button
   }()
@@ -42,7 +42,7 @@ class BookDetailViewController: UIViewController {
     let button = UIButton(configuration: buttonConfig)
     
     button.setTitle("담기", for: .normal)
-    button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+    button.addTarget(self, action: #selector(addButtonTabbed), for: .touchUpInside)
     
     return button
   }()
@@ -86,11 +86,11 @@ class BookDetailViewController: UIViewController {
     contentScrollView.contentSize = contentView.bounds.size
   }
   
-  @objc func closeButtonTapped() {
+  @objc func closeButtonTabbed() {
       self.dismiss(animated: true, completion: nil)
   }
   
-  @objc func addButtonTapped() {
+  @objc func addButtonTabbed() {
       self.dismiss(animated: true, completion: nil)
   }
   

@@ -12,7 +12,6 @@ class SearchViewController: UIViewController {
   
   let viewModel = SearchResultViewModel()
   var documents: [Document] = []
-  var didTappedCell: ((Document) -> Void)?
   
   lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()
