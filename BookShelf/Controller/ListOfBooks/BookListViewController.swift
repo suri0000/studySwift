@@ -43,7 +43,6 @@ class BookListViewController: UIViewController {
   
   lazy var bookListTableView: UITableView = {
     let tableView = UITableView()
-    tableView.backgroundColor = .orange
     
     return tableView
   }()

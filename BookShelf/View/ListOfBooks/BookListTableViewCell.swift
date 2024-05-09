@@ -37,7 +37,6 @@ class BookListTableViewCell: UITableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     setConstraints()
-    self.backgroundColor = .yellow
   }
   
   required init?(coder: NSCoder) {
@@ -56,10 +55,8 @@ class BookListTableViewCell: UITableViewCell {
     }
     
     bookTitle.snp.makeConstraints { make in
-      //make.top.equalTo(contentView.snp.centerY)
       make.top.equalTo(bookImage.snp.top).inset(50)
       make.leading.equalTo(bookImage.snp.trailing).offset(10)
-      //make.trailing.greaterThanOrEqualToSuperview()
     }
     
     author.snp.makeConstraints { make in
