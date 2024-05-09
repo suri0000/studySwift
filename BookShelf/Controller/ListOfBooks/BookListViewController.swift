@@ -10,7 +10,7 @@ import UIKit
 
 class BookListViewController: UIViewController {
   
-  var addedBook: [AddedBook] = []
+  var addedBook: [AddedBook] = CoreDataManager.shared.fetchBook()
   
   private lazy var bookListTitle: UILabel = {
     let label = UILabel()
@@ -41,23 +41,28 @@ class BookListViewController: UIViewController {
     return button
   }()
   
-  private lazy var bookListTableView: UITableView = {
+  lazy var bookListTableView: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = .orange
     
     return tableView
   }()
   
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
-    addedBook = CoreDataManager.shared.fetchBook()
     bookListTableView.delegate = self
     bookListTableView.dataSource = self
     bookListTableView.register(BookListTableViewCell.self, forCellReuseIdentifier: BookListTableViewCell.identifier)
     bookListTableView.reloadData()
     setConstraints()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    addedBook = CoreDataManager.shared.fetchBook()
+    bookListTableView.reloadData()
   }
   
   private func setConstraints() {
@@ -116,5 +121,17 @@ extension BookListViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     let height = tableView.bounds.height / 3
     return CGFloat(height)
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+  }
+  
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    
+    CoreDataManager.shared.deleteOneBook(addedBook[indexPath.row])
+    addedBook.remove(at: indexPath.row)
+    tableView.deleteRows(at: [indexPath], with: .fade)
+    tableView.reloadData()
   }
 }

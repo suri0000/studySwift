@@ -13,7 +13,7 @@ class BookDetailViewController: UIViewController {
   var bookData: Document?
   
   let detailView = DetailView()
-      
+  
   private let contentScrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,7 @@ class BookDetailViewController: UIViewController {
     let button = UIButton(configuration: buttonConfig)
     
     button.setTitle("담기", for: .normal)
-    button.addTarget(self, action: #selector(addButtonTabbed), for: .touchUpInside)
+    button.addTarget(self, action: #selector(addBookButtonTabbed), for: .touchUpInside)
     
     return button
   }()
@@ -90,10 +90,10 @@ class BookDetailViewController: UIViewController {
   }
   
   @objc func closeButtonTabbed() {
-      self.dismiss(animated: true, completion: nil)
+    self.dismiss(animated: true, completion: nil)
   }
   
-  @objc func addButtonTabbed() {
+  @objc func addBookButtonTabbed() {
     guard let book = bookData else { return }
     CoreDataManager.shared.saveBook(book)
     self.dismiss(animated: true, completion: nil)
