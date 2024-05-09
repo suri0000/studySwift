@@ -10,7 +10,6 @@ import UIKit
 
 class SearchViewController: UIViewController {
   
-  let viewModel = SearchResultViewModel()
   var documents: [Document] = []
   
   lazy var searchBar: UISearchBar = {
