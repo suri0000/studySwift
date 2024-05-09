@@ -26,7 +26,7 @@ class BookListViewController: UIViewController {
     
     button.setTitle("전체 삭제", for: .normal)
     button.setTitleColor(.systemGray3, for: .normal)
-    button.addTarget(BookListViewController.self, action: #selector(tabbedDeleteAllButton), for: .touchUpInside)
+    button.addTarget(self, action: #selector(tabbedDeleteAllButton), for: .touchUpInside)
     
     return button
   }()
@@ -36,7 +36,7 @@ class BookListViewController: UIViewController {
     
     button.setTitle("추가", for: .normal)
     button.setTitleColor(.orange, for: .normal)
-    button.addTarget(BookListViewController.self, action: #selector(addButtonTabbed), for: .touchUpInside)
+    button.addTarget(self, action: #selector(addButtonTabbed), for: .touchUpInside)
     
     return button
   }()
@@ -95,7 +95,9 @@ class BookListViewController: UIViewController {
   }
   
   @objc func tabbedDeleteAllButton() {
-    
+    CoreDataManager.shared.deleteAllBook()
+    addedBook.removeAll()
+    bookListTableView.reloadData()
   }
   
   @objc func addButtonTabbed() {
