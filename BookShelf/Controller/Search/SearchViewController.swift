@@ -11,6 +11,7 @@ import UIKit
 class SearchViewController: UIViewController {
   
   var documents: [Document] = []
+  var recentlyViewedBooks: [Document] = []
   
   lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()
@@ -46,10 +47,14 @@ class SearchViewController: UIViewController {
   
   let recentlyViewedBookCollectionViewLayout: UICollectionViewFlowLayout = {
     let layout = UICollectionViewFlowLayout()
-    layout.scrollDirection = .horizontal
-    
+    let deviceWidth = UIScreen.main.bounds.width
     let spacing: CGFloat = 10
+    let inset: CGFloat = 15
+    let cellWidth = (deviceWidth - spacing - inset * 2) / 3
+    
+    layout.scrollDirection = .horizontal
     layout.minimumLineSpacing = spacing
+    layout.itemSize = .init(width: cellWidth, height: cellWidth)
     
     return layout
   }()
@@ -153,8 +158,11 @@ class SearchViewController: UIViewController {
   func setCollectionView() {
     searchResultsCollectionView.delegate = self
     searchResultsCollectionView.dataSource = self
-    
     searchResultsCollectionView.register(SearchResultsCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultsCollectionViewCell.identifier)
+    
+    recentlyViewedBookCollectionView.delegate = self
+    recentlyViewedBookCollectionView.dataSource = self
+    recentlyViewedBookCollectionView.register(RecentlyViewdBookCollectionViewCell.self, forCellWithReuseIdentifier: RecentlyViewdBookCollectionViewCell.identifier)
   }
   
   func noResult() {
@@ -172,17 +180,40 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return documents.count
+    switch collectionView {
+      case searchResultsCollectionView:
+        
+        return documents.count
+      case recentlyViewedBookCollectionView:
+        
+        //return recentlyViewedBooks.count
+        return 5
+      default:
+        return 0
+    }
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
-    
-    let document = documents[indexPath.item]
-    
-    cell.configureUI(book: document)
-    
-    return cell
+    switch collectionView {
+      case searchResultsCollectionView:
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
+        
+        let document = documents[indexPath.item]
+        
+        cell.configureUI(book: document)
+        
+        return cell
+      case recentlyViewedBookCollectionView:
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlyViewdBookCollectionViewCell.identifier, for: indexPath) as? RecentlyViewdBookCollectionViewCell else { return UICollectionViewCell() }
+        
+        //let document = documents[indexPath.item]
+        
+        return cell
+        
+      default:
+        return UICollectionViewCell()
+    }
+  
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -226,4 +257,8 @@ extension SearchViewController: UISearchBarDelegate {
     }
   }
   
+}
+
+#Preview {
+  SearchViewController()
 }
