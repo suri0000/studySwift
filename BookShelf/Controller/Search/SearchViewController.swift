@@ -16,33 +16,51 @@ class SearchViewController: UIViewController {
     let searchBar = UISearchBar()
     
     searchBar.searchBarStyle = .minimal
-    searchBar.placeholder = "책 제목을 검색해 주세요"
+    searchBar.placeholder = "제목, 저자 등을 검색해 주세요"
     
     return searchBar
   }()
   
+  lazy var scrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+    
+    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    scrollView.showsVerticalScrollIndicator = false
+    scrollView.backgroundColor = .blue
+    
+    return scrollView
+  }()
+  
+  lazy var contentView: UIView = {
+    let view = UIView()
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.backgroundColor = .yellow
+    
+    return view
+  }()
+  
   let noResultLable = UILabel()
   
-  //  let recentlyViewedBookTitle = UILabel(text: "최근 본 책")
+  let recentlyViewedBookTitle = UILabel(text: "최근 본 책")
   let searchResultTitle = UILabel(text: "검색 결과")
-  //
-  //  let recentlyViewedBookCollectionViewLayout: UICollectionViewFlowLayout = {
-  //    let layout = UICollectionViewFlowLayout()
-  //    layout.scrollDirection = .horizontal
-  //
-  //    let spacing: CGFloat = 10
-  //    layout.minimumLineSpacing = spacing
-  //
-  //    return layout
-  //  }()
-  //
-  //  lazy var recentlyViewedBookCollectionView: UICollectionView = {
-  //    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: recentlyViewedBookCollectionViewLayout)
-  //
-  //    collectionView.backgroundColor = .cyan
-  //
-  //    return collectionView
-  //  }()
+  
+  let recentlyViewedBookCollectionViewLayout: UICollectionViewFlowLayout = {
+    let layout = UICollectionViewFlowLayout()
+    layout.scrollDirection = .horizontal
+    
+    let spacing: CGFloat = 10
+    layout.minimumLineSpacing = spacing
+    
+    return layout
+  }()
+  
+  lazy var recentlyViewedBookCollectionView: UICollectionView = {
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: recentlyViewedBookCollectionViewLayout)
+    
+    collectionView.backgroundColor = .cyan
+    
+    return collectionView
+  }()
   
   let searchResultsCollectionViewLayout: UICollectionViewFlowLayout = {
     let layout = UICollectionViewFlowLayout()
@@ -64,6 +82,7 @@ class SearchViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: searchResultsCollectionViewLayout)
     
     collectionView.showsVerticalScrollIndicator = false
+    collectionView.backgroundColor = .green
     
     return collectionView
   }()
@@ -84,35 +103,51 @@ class SearchViewController: UIViewController {
   
   func setLayout() {
     view.addSubview(searchBar)
-    view.addSubview(searchResultTitle)
-    view.addSubview(searchResultsCollectionView)
+    view.addSubview(scrollView)
+    scrollView.addSubview(contentView)
+    contentView.addSubview(searchResultTitle)
+    contentView.addSubview(searchResultsCollectionView)
+    contentView.addSubview(recentlyViewedBookTitle)
+    contentView.addSubview(recentlyViewedBookCollectionView)
     
     searchBar.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
       $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(5)
     }
     
-    //    view.addSubview(recentlyViewedBookTitle)
-    //    recentlyViewedBookTitle.snp.makeConstraints {
-    //      $0.top.equalTo(searchBar.snp.bottom).offset(10)
-    //      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
-    //    }
-    //
-    //    view.addSubview(recentlyViewedBookCollectionView)
-    //    recentlyViewedBookCollectionView.snp.makeConstraints {
-    //      $0.top.equalTo(recentlyViewedBookTitle.snp.bottom).offset(20)
-    //      $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(15)
-    //    }
+    scrollView.snp.makeConstraints { make in
+      make.top.equalTo(searchBar.snp.bottom).inset(-5)
+      make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+    }
+    
+    contentView.snp.makeConstraints { make in
+      make.edges.width.equalTo(scrollView)
+    }
+    
+    recentlyViewedBookTitle.snp.makeConstraints {
+      $0.top.equalTo(contentView.snp.top)
+      $0.leading.equalTo(contentView.snp.leading).inset(15)
+    }
+    
+    recentlyViewedBookCollectionView.snp.makeConstraints {
+      $0.top.equalTo(recentlyViewedBookTitle.snp.bottom).offset(20)
+      $0.horizontalEdges.equalTo(contentView).inset(15)
+      $0.height.equalToSuperview().multipliedBy(1.0 / 6.0)
+    }
     
     searchResultTitle.snp.makeConstraints {
-      $0.top.equalTo(searchBar.snp.bottom).offset(20)
-      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
+      $0.top.equalTo(recentlyViewedBookCollectionView.snp.bottom).offset(20)
+      $0.leading.equalTo(contentView.snp.leading).inset(15)
     }
     
     searchResultsCollectionView.snp.makeConstraints {
       $0.top.equalTo(searchResultTitle.snp.bottom).offset(20)
-      $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
+      $0.horizontalEdges.equalTo(contentView.snp.horizontalEdges).inset(15)
+      $0.bottom.equalTo(contentView.snp.bottom)
+      $0.height.equalToSuperview().multipliedBy(2.0 / 3.0)
     }
+    
+    scrollView.contentSize = contentView.bounds.size
   }
   
   func setCollectionView() {
@@ -133,7 +168,7 @@ class SearchViewController: UIViewController {
   
 }
 
-// MARK: - CollectionView
+// MARK: - CollectionViewDelegate
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -190,6 +225,5 @@ extension SearchViewController: UISearchBarDelegate {
       }
     }
   }
-  
   
 }
