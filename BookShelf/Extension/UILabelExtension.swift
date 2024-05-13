@@ -12,6 +12,6 @@ extension UILabel {
           self.init()
           self.text = text
           self.adjustsFontForContentSizeCategory = true
-          self.font = UIFont.preferredFont(for: .title1, weight: .bold)
+          self.font = UIFont.preferredFont(for: .title2, weight: .bold)
       }
 }
