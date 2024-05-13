@@ -27,7 +27,6 @@ class SearchViewController: UIViewController {
     
     scrollView.translatesAutoresizingMaskIntoConstraints = false
     scrollView.showsVerticalScrollIndicator = false
-    scrollView.backgroundColor = .blue
     
     return scrollView
   }()
@@ -35,7 +34,6 @@ class SearchViewController: UIViewController {
   lazy var contentView: UIView = {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
-    view.backgroundColor = .yellow
     
     return view
   }()
@@ -62,8 +60,6 @@ class SearchViewController: UIViewController {
   lazy var recentlyViewedBookCollectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: recentlyViewedBookCollectionViewLayout)
     
-    collectionView.backgroundColor = .cyan
-    
     return collectionView
   }()
   
@@ -87,7 +83,6 @@ class SearchViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: searchResultsCollectionViewLayout)
     
     collectionView.showsVerticalScrollIndicator = false
-    collectionView.backgroundColor = .green
     
     return collectionView
   }()

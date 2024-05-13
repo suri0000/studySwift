@@ -13,9 +13,6 @@ class RecentlyViewdBookCollectionViewCell: UICollectionViewCell {
   
   private lazy var bookImage: UIImageView = {
     let imageView = UIImageView()
-    
-    imageView.backgroundColor = .brown
-    
     imageView.image = UIImage(systemName: "star")
     imageView.layer.cornerRadius = (self.frame.width / 2) - 10
     imageView.clipsToBounds = true
@@ -33,7 +30,6 @@ class RecentlyViewdBookCollectionViewCell: UICollectionViewCell {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    contentView.backgroundColor = .orange
     setConstaints()
   }
   
