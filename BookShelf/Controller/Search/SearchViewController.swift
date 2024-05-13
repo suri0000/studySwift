@@ -258,7 +258,3 @@ extension SearchViewController: UISearchBarDelegate {
   }
   
 }
-
-#Preview {
-  SearchViewController()
-}
